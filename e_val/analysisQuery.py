@@ -71,6 +71,39 @@ class AnalysisQuery:
         for info in self.result["moveInfos"]:
             print(info)
 
+    def outputToAnki(self, outdir):
+        ANKI_HEADER = b"#separator:tab\n#html:true\n#tags column:2\n"
+        with open(self.basefile, "r") as f:
+            export_game = sgfmill.sgf.Sgf_game.from_string(f.read())
+        main_sequence = export_game.get_main_sequence()
+        last_move = self.analyzeTurns[0] #TODO: this will only work as long as every query only queries a single move or queries in descending order
+        last_node = main_sequence[last_move]
+        #Truncate game to move at the end of analysis
+        for child_node in last_node:
+            child_node.delete()
+        #Add marker to last move
+        last_node.set("CR", [last_node.get_move()[1]])
+        prior = self.result["rootInfo"]
+        last_node.add_comment_text(f"WinRate: {prior['winrate']}, Points Lead: {prior['scoreLead']}")
+        #Append variations to move
+        idx = 0
+        with open(os.path.join(outdir,self.id+f"_deck.txt"), "wb") as d:
+            d.write(ANKI_HEADER)
+            for moveInfo in self.result["moveInfos"]:
+                toPlay = sgfmill.common.opponent_of(last_node.get_move()[0])
+                variation_base = last_node.new_child()
+                variation_base.add_comment_text(f"WinRate: {moveInfo['winrate']}, Points Lead: {moveInfo['scoreLead']}\nWinRate Diff: {moveInfo['winrate']-prior['winrate']}, Points Diff: {moveInfo['scoreLead']-prior['scoreLead']}")
+                variation_node = variation_base
+                for m in moveInfo['pv']:
+                    variation_node.set_move(toPlay, sgfmill.common.move_from_vertex(m, self.boardXSize))
+                    toPlay = sgfmill.common.opponent_of(toPlay)
+                    variation_node = variation_node.new_child()
+                data = export_game.serialise()
+                data = data.replace(b"\n", b"")+b"\n" #remove newlines from sgf
+                d.write(data) #Also output into deck file
+                variation_base.delete()
+                idx += 1
+
     def outputToSGF(self, outdir):
         with open(self.basefile, "r") as f:
             export_game = sgfmill.sgf.Sgf_game.from_string(f.read())

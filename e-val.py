@@ -15,6 +15,7 @@ if __name__ == "__main__":
     argparser.add_argument("-a", "--analysis-config", help="Path to analysis config file for katago", default="./katago_bin/analysis_example.cfg")
     argparser.add_argument("-m", "--model", help="Path to katago model to use", default="./katago_bin/g170-b30c320x2-s4824661760-d1229536699.bin.gz")
     argparser.add_argument("-o", "--outDir", help="Directory to write generated sgf files to", default=".")
+    argparser.add_argument("-v", "--anki", help="Output the variations as an anki deck", default=False, action='store_true')
     argparser.add_argument("sgf_file", help="SGF file to analyze")
     argparser.add_argument("move", type=int, nargs='+', help="One or more move numbers to analyse, note that in handicap games the handicap stones might not be considered a move")
 
@@ -36,5 +37,8 @@ if __name__ == "__main__":
         while not query.hasResult():
             engine.pollResult()
         
-        query.printResult()
-        query.outputToSGF(args.outDir)
+        #query.printResult()
+        if args.anki:
+            query.outputToAnki(args.outDir)
+        else:
+            query.outputToSGF(args.outDir)
