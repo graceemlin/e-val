@@ -16,6 +16,7 @@ if __name__ == "__main__":
     argparser.add_argument("-m", "--model", help="Path to katago model to use", default=None)
     argparser.add_argument("-o", "--outDir", help="Directory to write generated sgf files to", default=".")
     argparser.add_argument("-v", "--anki", help="Output the variations as an anki deck", default=False, action='store_true')
+    argparser.add_argument("-t", "--truncate", help="Truncate output sgf, so that the only moves in it are the variation", default=False, action='store_true')
     argparser.add_argument("sgf_file", help="SGF file to analyze")
     argparser.add_argument("move", type=int, nargs='+', help="One or more move numbers to analyse, note that in handicap games the handicap stones might not be considered a move")
 
@@ -39,6 +40,6 @@ if __name__ == "__main__":
         
         #query.printResult()
         if args.anki:
-            query.outputToAnki(args.outDir)
+            query.outputToAnki(args.outDir, args.truncate)
         else:
-            query.outputToSGF(args.outDir)
+            query.outputToSGF(args.outDir, args.truncate)
