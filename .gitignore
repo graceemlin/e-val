@@ -1,4 +1,5 @@
 analysis_logs
 katago_bin
+**/__pycache__
 *.sgf
 *.txt

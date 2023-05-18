@@ -13,7 +13,7 @@ if __name__ == "__main__":
     argparser.add_argument("-r", "--rules", choices=["japanese", "chinese", "chinese-ogs", "chinese-kgs", "tromp-taylor", "korean", "stone-scoring", "aga", "bga"], default="japanese")
     argparser.add_argument("-k", "--katago", help="Path to katago executable", default="./katago_bin/katago")
     argparser.add_argument("-a", "--analysis-config", help="Path to analysis config file for katago", default="./katago_bin/analysis_example.cfg")
-    argparser.add_argument("-m", "--model", help="Path to katago model to use", default="./katago_bin/g170-b30c320x2-s4824661760-d1229536699.bin.gz")
+    argparser.add_argument("-m", "--model", help="Path to katago model to use", default=None)
     argparser.add_argument("-o", "--outDir", help="Directory to write generated sgf files to", default=".")
     argparser.add_argument("-v", "--anki", help="Output the variations as an anki deck", default=False, action='store_true')
     argparser.add_argument("sgf_file", help="SGF file to analyze")
