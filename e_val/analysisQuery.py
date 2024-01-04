@@ -2,6 +2,8 @@ import json
 import sgfmill
 import sgfmill.common
 import os.path
+from .board import Board
+
 class AnalysisQuery:
 
     #{
@@ -85,21 +87,24 @@ class AnalysisQuery:
         main_sequence = export_game.get_main_sequence()
         last_move = self.analyzeTurns[0] #TODO: this will only work as long as every query only queries a single move or queries in descending order
         last_node = main_sequence[last_move]
+        board = Board()
         if truncate:
             b_moves, w_moves, _ = export_game.get_root().get_setup_stones()
             b_moves = list(b_moves)
             w_moves = list(w_moves)
+            for move in b_moves:
+                board.add_move('b', move[0], move[1])
+            for move in w_moves:
+                board.add_move('w', move[0], move[1])
+
             c_node = main_sequence[0]
             while c_node != last_node:
                 c,m = c_node.get_move()
-                if c == 'b':
-                    if m:
-                        b_moves.append(m)
-                else:
-                    if m:
-                        w_moves.append(m)
+                if m:
+                  board.add_move(c, m[0], m[1])
                 c_node = c_node[0]
-            export_game.get_root().set_setup_stones(b_moves, w_moves)
+            black_setup, white_setup = board.output_points()
+            export_game.get_root().set_setup_stones(black_setup, white_setup)
             for c in export_game.get_root():
                 c.delete()
             last_node.reparent(export_game.get_root())
