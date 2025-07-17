@@ -1,5 +1,5 @@
 # E-Val
-Small tool to generate sgf files out of katago variations 
+Small tool to generate SGF files out of KataGo variations 
 
 ## Setup
 Clone this repository and init the submodules
@@ -7,12 +7,13 @@ Clone this repository and init the submodules
 git submodule update --init --recursive
 ```
 
-Download latest katago release and unzip into a directory called 'katago_bin' to make default CLI options line up
-Download a katago model and put it somewhere
+Download the latest KataGo release and unzip it into a directory called 'katago_bin' to make the default CLI options line up
 
-Potentially need to install missing pypy packages
-sgfmill
-tqdm
+Download a KataGo model and put it somewhere
+
+Potentially need to install missing PyPy packages:
+- sgfmill
+- tqdm
 
 You can tweak the configuration or which model is being used via the command line options
 
@@ -28,17 +29,17 @@ positional arguments:
   move                  One or more move numbers to analyse, note that in handicap games the handicap stones might not be considered a move
 
 options:
-  -h, --help            show this help message and exit
+  -h, --help            Show this help message and exit
   -r {japanese,chinese,chinese-ogs,chinese-kgs,tromp-taylor,korean,stone-scoring,aga,bga}, --rules {japanese,chinese,chinese-ogs,chinese-kgs,tromp-taylor,korean,stone-scoring,aga,bga}
   -k KATAGO, --katago KATAGO
-                        Path to katago executable (default: ./katago_bin/katago)
+                        Path to KataGo executable (default: ./katago_bin/katago)
   -a ANALYSIS_CONFIG, --analysis-config ANALYSIS_CONFIG
-                        Path to analysis config file for katago (default: ./katago_bin/analysis_example.cfg)
+                        Path to analysis config file for KataGo (default: ./katago_bin/analysis_example.cfg)
   -m MODEL, --model MODEL
-                        Path to katago model to use (default: ./katago_bin/g170-b30c320x2-s4824661760-d1229536699.bin.gz)
+                        Path to KataGo model to use (default: ./katago_bin/g170-b30c320x2-s4824661760-d1229536699.bin.gz)
   -o OUTDIR, --outDir OUTDIR
                         Directory to write generated sgf files to (default: .)
 ```
 
-The tool will generate a new sgf file for every move it was asked to generate variations for.
-If no output directory is specified it will generate them in the current directory
+The tool will generate a new SGF file for every move it was asked to generate variations for.\
+If no output directory is specified it will generate them in the current directory.
